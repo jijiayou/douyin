@@ -154,7 +154,7 @@ func GetSecUidBySharedUrl(sharedUrl string) (secUid string) {
 	return
 }
 
-func GetOthersVideoByTimeStamp(secUid string, begin, end int64) (result []ExplosiveSentenceVideo, hasMore, bool, err error) {
+func GetOthersVideoByTimeStamp(secUid string, begin, end int64) (result []ExplosiveSentenceVideo, hasMore bool, err error) {
 	req := HttpRequest.NewRequest()
 	req.SetHeaders(map[string]string{
 		"User-Agent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Mobile Safari/537.36",
