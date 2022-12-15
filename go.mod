@@ -1,4 +1,4 @@
-module douyin
+module github.com/jijiayou/douyin
 
 go 1.19
 
