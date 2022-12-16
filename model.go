@@ -102,3 +102,6 @@ type User struct {
 	Nickname string `json:"nickname"`
 	ShortID  string `json:"short_id"`
 }
+type Options struct {
+	Address string `json:"address"`
+}
