@@ -4,15 +4,18 @@ type ExplosiveSentenceVideo struct {
 	Desc         string `json:"desc"`
 	DiggCount    int64  `json:"digg_count"`
 	CommentCount int64  `json:"comment_count"`
+	ShareCount   int64  `json:"share_count"`
 	PlayCount    int64  `json:"play_count"`
 	AwemeId      string `json:"aweme_id" `
 	VideoUrl     string `json:"video_url"`
 	Time         int64  `json:"time"`
 	SecUid       string `json:"sec_uid"`
+	UniqueId     string `json:"unique_id"`
 	DouyinId     string `json:"douyin_id"`
 	NickName     string `json:"nick_name"`
 	ReleaseTime  int64  `json:"release_time"`
-	CoverImage   string `gjson:"cover_image"`
+	CoverImage   string `json:"cover_image"`
+	Duration     int64  `json:"duration"`
 	Comments     string `json:"comments" `
 }
 type VideoInfo struct {

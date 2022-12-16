@@ -185,14 +185,18 @@ func GetMyVideos(minCursor, maxCursor int64, sessionid string, options Options) 
 
 		video.AwemeId = gjson.Get(res, fmt.Sprintf("aweme_list.%d.aweme_id", i)).String()
 		video.Desc = gjson.Get(res, fmt.Sprintf("aweme_list.%d.desc", i)).String()
-		video.VideoUrl = gjson.Get(res, fmt.Sprintf("aweme_list.%d.video.play_addr.url_list.0", i)).String()
 		video.DouyinId = gjson.Get(res, fmt.Sprintf("aweme_list.%d.author.short_id", i)).String()
 		video.SecUid = gjson.Get(res, fmt.Sprintf("aweme_list.%d.author.sec_uid", i)).String()
+		video.UniqueId = gjson.Get(res, fmt.Sprintf("aweme_list.%d.author.unique_id", i)).String()
+		video.NickName = gjson.Get(res, fmt.Sprintf("aweme_list.%d.author.nickname", i)).String()
 
 		video.Time = time.Now().Unix()
 		video.CommentCount = gjson.Get(res, fmt.Sprintf("aweme_list.%d.statistics.comment_count", i)).Int()
 		video.DiggCount = gjson.Get(res, fmt.Sprintf("aweme_list.%d.statistics.digg_count", i)).Int()
+		video.ShareCount = gjson.Get(res, fmt.Sprintf("aweme_list.%d.statistics.share_count", i)).Int()
 		video.PlayCount = gjson.Get(res, fmt.Sprintf("aweme_list.%d.statistics.play_count", i)).Int()
+		video.VideoUrl = gjson.Get(res, fmt.Sprintf("aweme_list.%d.video.play_addr.url_list.0", i)).String()
+		video.Duration = gjson.Get(res, fmt.Sprintf("aweme_list.%d.video.duration", i)).Int()
 
 		video.CoverImage = gjson.Get(res, fmt.Sprintf("aweme_list.%d.video.cover.url_list.0", i)).String()
 		originUrl := gjson.Get(res, fmt.Sprintf("aweme_list.%d.video.origin_cover.uri", i)).String()
@@ -279,11 +283,16 @@ func GetOthersVideoByTimeStamp(secUid string, begin, end int64, options Options)
 		video.VideoUrl = gjson.Get(res, fmt.Sprintf("aweme_list.%d.video.play_addr.url_list.0", i)).String()
 		video.DouyinId = gjson.Get(res, fmt.Sprintf("aweme_list.%d.author.short_id", i)).String()
 		video.SecUid = gjson.Get(res, fmt.Sprintf("aweme_list.%d.author.sec_uid", i)).String()
+		video.UniqueId = gjson.Get(res, fmt.Sprintf("aweme_list.%d.author.unique_id", i)).String()
 
+		video.NickName = gjson.Get(res, fmt.Sprintf("aweme_list.%d.author.nickname", i)).String()
 		video.Time = time.Now().Unix()
 		video.CommentCount = gjson.Get(res, fmt.Sprintf("aweme_list.%d.statistics.comment_count", i)).Int()
 		video.DiggCount = gjson.Get(res, fmt.Sprintf("aweme_list.%d.statistics.digg_count", i)).Int()
+		video.ShareCount = gjson.Get(res, fmt.Sprintf("aweme_list.%d.statistics.share_count", i)).Int()
+
 		video.PlayCount = gjson.Get(res, fmt.Sprintf("aweme_list.%d.statistics.play_count", i)).Int()
+		video.Duration = gjson.Get(res, fmt.Sprintf("aweme_list.%d.video.duration", i)).Int()
 
 		video.CoverImage = gjson.Get(res, fmt.Sprintf("aweme_list.%d.video.cover.url_list.0", i)).String()
 		originUrl := gjson.Get(res, fmt.Sprintf("aweme_list.%d.video.origin_cover.uri", i)).String()
@@ -335,17 +344,18 @@ func GetOthersUserInfo(secUid string, options Options) (result OtherUserInfo, er
 		r := gjson.Get(res, "user_info").String()
 		json.Unmarshal([]byte(r), &result)
 		return
+	} else {
+		c := &http.Client{}
+		err = gout.New(c).GET(douYinUrl).
+			SetProxy(options.Address).
+			SetHeader(gout.H{
+				"user-agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
+				"accept-language": "zh-CN,zh;q=0.9",
+			}).BindBody(&res).Do()
+		r := gjson.Get(res, "user_info").String()
+		json.Unmarshal([]byte(r), &result)
+		return
 	}
-	c := &http.Client{}
-	err = gout.New(c).GET(douYinUrl).
-		SetProxy(options.Address).
-		SetHeader(gout.H{
-			"user-agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
-			"accept-language": "zh-CN,zh;q=0.9",
-		}).BindBody(&res).Do()
-	r := gjson.Get(res, "user_info").String()
-	json.Unmarshal([]byte(r), &result)
-	return
 }
 
 // 最大二十
@@ -363,18 +373,39 @@ func GetVideosInfoByAwemeId(awemeIdList []string, options Options) (result []Exp
 				"user-agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
 				"accept-language": "zh-CN,zh;q=0.9",
 			}).BindBody(&res).Do()
-		r := gjson.Get(res, "item_list").String()
-		json.Unmarshal([]byte(r), &result)
-		return
+	} else {
+		c := &http.Client{}
+		err = gout.New(c).GET(douYinUrl).
+			SetProxy(options.Address).
+			SetHeader(gout.H{
+				"user-agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
+				"accept-language": "zh-CN,zh;q=0.9",
+			}).BindBody(&res).Do()
 	}
-	c := &http.Client{}
-	err = gout.New(c).GET(douYinUrl).
-		SetProxy(options.Address).
-		SetHeader(gout.H{
-			"user-agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
-			"accept-language": "zh-CN,zh;q=0.9",
-		}).BindBody(&res).Do()
-	r := gjson.Get(res, "item_list").String()
-	json.Unmarshal([]byte(r), &result)
+	r := gjson.Get(res, "item_list").Array()
+
+	for i, _ := range r {
+		var video ExplosiveSentenceVideo
+
+		video.AwemeId = gjson.Get(res, fmt.Sprintf("item_list.%d.aweme_id", i)).String()
+		video.Desc = gjson.Get(res, fmt.Sprintf("item_list.%d.desc", i)).String()
+		video.DouyinId = gjson.Get(res, fmt.Sprintf("item_list.%d.author.short_id", i)).String()
+		video.SecUid = gjson.Get(res, fmt.Sprintf("item_list.%d.author.sec_uid", i)).String()
+		video.NickName = gjson.Get(res, fmt.Sprintf("item_list.%d.author.nickname", i)).String()
+		video.UniqueId = gjson.Get(res, fmt.Sprintf("item_list.%d.author.unique_id", i)).String()
+
+		video.Time = time.Now().Unix()
+		video.CommentCount = gjson.Get(res, fmt.Sprintf("item_list.%d.statistics.comment_count", i)).Int()
+		video.DiggCount = gjson.Get(res, fmt.Sprintf("item_list.%d.statistics.digg_count", i)).Int()
+		video.ShareCount = gjson.Get(res, fmt.Sprintf("item_list.%d.statistics.share_count", i)).Int()
+
+		video.PlayCount = gjson.Get(res, fmt.Sprintf("item_list.%d.statistics.play_count", i)).Int()
+		video.Duration = gjson.Get(res, fmt.Sprintf("item_list.%d.video.duration", i)).Int()
+		video.VideoUrl = gjson.Get(res, fmt.Sprintf("item_list.%d.video.play_addr.url_list.0", i)).String()
+
+		video.CoverImage = gjson.Get(res, fmt.Sprintf("item_list.%d.video.cover.url_list.0", i)).String()
+		video.ReleaseTime = gjson.Get(res, fmt.Sprintf("item_list.%d.create_time", i)).Int()
+		result = append(result, video)
+	}
 	return
 }
