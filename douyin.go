@@ -17,10 +17,10 @@ import (
 
 // 只能通过cookie中的sessionid查看自己的相关信息
 func GetUserNickName(sessionid string, options Options) (nickName string, err error) {
-	url := "https://creator.douyin.com/aweme/v1/creator/user/info"
+	douYinUrl := "https://creator.douyin.com/aweme/v1/creator/user/info"
 	var res string
 	if options.Address == "" {
-		err = gout.GET(url).
+		err = gout.GET(douYinUrl).
 			SetHeader(gout.H{
 				"content-type": "application/json;charset=UTF-8",
 				"user-agent":   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
@@ -31,7 +31,7 @@ func GetUserNickName(sessionid string, options Options) (nickName string, err er
 		return
 	}
 	c := &http.Client{}
-	err = gout.New(c).GET(url).
+	err = gout.New(c).GET(douYinUrl).
 		SetProxy(options.Address).
 		SetHeader(gout.H{
 			"content-type": "application/json;charset=UTF-8",
@@ -44,10 +44,10 @@ func GetUserNickName(sessionid string, options Options) (nickName string, err er
 }
 
 func GetCommentsVideos(sessionid string, cursor int, options Options) (result []VideoInfo, err error) {
-	url := fmt.Sprintf("https://creator.douyin.com/aweme/v1/creator/item/list/?aid=2906&app_name=aweme_creator_platform&device_platform=web&cursor=%d&count=20", cursor)
+	douYinUrl := fmt.Sprintf("https://creator.douyin.com/aweme/v1/creator/item/list/?aid=2906&app_name=aweme_creator_platform&device_platform=web&cursor=%d&count=20", cursor)
 	var res string
 	if options.Address == "" {
-		err = gout.GET(url).
+		err = gout.GET(douYinUrl).
 			SetHeader(gout.H{
 				"user-agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
 				"referer":         "https://creator.douyin.com/creator-micro/data/following/comment",
@@ -59,7 +59,7 @@ func GetCommentsVideos(sessionid string, cursor int, options Options) (result []
 		return
 	}
 	c := &http.Client{}
-	err = gout.New(c).GET(url).
+	err = gout.New(c).GET(douYinUrl).
 		SetProxy(options.Address).
 		SetHeader(gout.H{
 			"user-agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
@@ -73,10 +73,10 @@ func GetCommentsVideos(sessionid string, cursor int, options Options) (result []
 }
 
 func GetCommentsList(sessionid string, cursor int, videoItemid string, options Options) (result []CommentInfo, err error) {
-	url := fmt.Sprintf("https://creator.douyin.com/aweme/v1/creator/comment/list/?aid=2906&app_name=aweme_creator_platform&device_platform=web&item_id=%s&cursor=%d&count=20&sort=HOT", url.QueryEscape(videoItemid), cursor)
+	douYinUrl := fmt.Sprintf("https://creator.douyin.com/aweme/v1/creator/comment/list/?aid=2906&app_name=aweme_creator_platform&device_platform=web&item_id=%s&cursor=%d&count=20&sort=HOT", url.QueryEscape(videoItemid), cursor)
 	var res string
 	if options.Address == "" {
-		err = gout.GET(url).
+		err = gout.GET(douYinUrl).
 			SetHeader(gout.H{
 				"user-agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
 				"referer":         "https://creator.douyin.com/creator-micro/data/following/comment",
@@ -88,7 +88,7 @@ func GetCommentsList(sessionid string, cursor int, videoItemid string, options O
 		return
 	}
 	c := &http.Client{}
-	err = gout.New(c).GET(url).
+	err = gout.New(c).GET(douYinUrl).
 		SetProxy(options.Address).
 		SetHeader(gout.H{
 			"user-agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
@@ -102,10 +102,10 @@ func GetCommentsList(sessionid string, cursor int, videoItemid string, options O
 }
 
 func GetCommentsListReply(sessionid string, cursor int, comment_id string, options Options) (result []CommentInfo, err error) {
-	url := fmt.Sprintf("https://creator.douyin.com/aweme/v1/creator/comment/reply/list/?aid=2906&app_name=aweme_creator_platform&device_platform=web&comment_id=%s&cursor=%d&count=20&sort=HOT", url.QueryEscape(comment_id), cursor)
+	douYinUrl := fmt.Sprintf("https://creator.douyin.com/aweme/v1/creator/comment/reply/list/?aid=2906&app_name=aweme_creator_platform&device_platform=web&comment_id=%s&cursor=%d&count=20&sort=HOT", url.QueryEscape(comment_id), cursor)
 	var res string
 	if options.Address == "" {
-		err = gout.GET(url).
+		err = gout.GET(douYinUrl).
 			SetHeader(gout.H{
 				"user-agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
 				"referer":         "https://creator.douyin.com/creator-micro/data/following/comment",
@@ -117,7 +117,7 @@ func GetCommentsListReply(sessionid string, cursor int, comment_id string, optio
 		return
 	}
 	c := &http.Client{}
-	err = gout.New(c).GET(url).
+	err = gout.New(c).GET(douYinUrl).
 		SetProxy(options.Address).
 		SetHeader(gout.H{
 			"user-agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
@@ -130,10 +130,10 @@ func GetCommentsListReply(sessionid string, cursor int, comment_id string, optio
 	return
 }
 func DeleteCommentsList(sessionid string, commentId string, options Options) (err error) {
-	url := fmt.Sprintf("https://creator.douyin.com/aweme/v1/creator/comment/delete/?aid=2906&app_name=aweme_creator_platform&device_platform=web")
+	douYinUrl := fmt.Sprintf("https://creator.douyin.com/aweme/v1/creator/comment/delete/?aid=2906&app_name=aweme_creator_platform&device_platform=web")
 	var res string
 	if options.Address == "" {
-		err = gout.POST(url).
+		err = gout.POST(douYinUrl).
 			SetHeader(gout.H{
 				"user-agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
 				"referer":         "https://creator.douyin.com/creator-micro/data/following/comment",
@@ -143,7 +143,7 @@ func DeleteCommentsList(sessionid string, commentId string, options Options) (er
 		return
 	}
 	c := &http.Client{}
-	err = gout.New(c).POST(url).
+	err = gout.New(c).POST(douYinUrl).
 		SetProxy(options.Address).
 		SetHeader(gout.H{
 			"user-agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
@@ -156,10 +156,10 @@ func DeleteCommentsList(sessionid string, commentId string, options Options) (er
 }
 
 func GetMyVideos(minCursor, maxCursor int64, sessionid string, options Options) (result []ExplosiveSentenceVideo, err error) {
-	url := fmt.Sprintf("https://creator.douyin.com/web/api/media/aweme/post/?scene=star_atlas&status=0&count=12&min_cursor=%d&max_cursor=%d", minCursor, maxCursor)
+	douYinUrl := fmt.Sprintf("https://creator.douyin.com/web/api/media/aweme/post/?scene=star_atlas&status=0&count=12&min_cursor=%d&max_cursor=%d", minCursor, maxCursor)
 	var res string
 	if options.Address == "" {
-		err = gout.GET(url).
+		err = gout.GET(douYinUrl).
 			SetHeader(gout.H{
 				"user-agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
 				"referer":         "https://creator.douyin.com/creator-micro/content/manage",
@@ -168,7 +168,7 @@ func GetMyVideos(minCursor, maxCursor int64, sessionid string, options Options) 
 			}).BindBody(&res).Do()
 	} else {
 		c := &http.Client{}
-		err = gout.New(c).GET(url).
+		err = gout.New(c).GET(douYinUrl).
 			SetProxy(options.Address).
 			SetHeader(gout.H{
 				"user-agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
@@ -299,10 +299,10 @@ func GetOthersVideoByTimeStamp(secUid string, begin, end int64, options Options)
 
 func GetOthersCommentsByAwemeId(awemeid string, cursor int, options Options) (result []OtherCommentInfo, err error) {
 
-	url := fmt.Sprintf("https://www.douyin.com/aweme/v1/web/comment/list/?aweme_id=%s&cursor=%d&count=50", awemeid, cursor)
+	douYinUrl := fmt.Sprintf("https://www.douyin.com/aweme/v1/web/comment/list/?aweme_id=%s&cursor=%d&count=50", awemeid, cursor)
 	var res string
 	if options.Address == "" {
-		err = gout.GET(url).
+		err = gout.GET(douYinUrl).
 			SetHeader(gout.H{
 				"user-agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
 				"accept-language": "zh-CN,zh;q=0.9",
@@ -312,13 +312,69 @@ func GetOthersCommentsByAwemeId(awemeid string, cursor int, options Options) (re
 		return
 	}
 	c := &http.Client{}
-	err = gout.New(c).GET(url).
+	err = gout.New(c).GET(douYinUrl).
 		SetProxy(options.Address).
 		SetHeader(gout.H{
 			"user-agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
 			"accept-language": "zh-CN,zh;q=0.9",
 		}).BindBody(&res).Do()
 	r := gjson.Get(res, "comments").String()
+	json.Unmarshal([]byte(r), &result)
+	return
+}
+
+func GetOthersUserInfo(secUid string, options Options) (result OtherUserInfo, err error) {
+	douYinUrl := fmt.Sprintf("https://www.iesdouyin.com/web/api/v2/user/info/?sec_uid=%s", secUid)
+	var res string
+	if options.Address == "" {
+		err = gout.GET(douYinUrl).
+			SetHeader(gout.H{
+				"user-agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
+				"accept-language": "zh-CN,zh;q=0.9",
+			}).BindBody(&res).Do()
+		r := gjson.Get(res, "user_info").String()
+		json.Unmarshal([]byte(r), &result)
+		return
+	}
+	c := &http.Client{}
+	err = gout.New(c).GET(douYinUrl).
+		SetProxy(options.Address).
+		SetHeader(gout.H{
+			"user-agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
+			"accept-language": "zh-CN,zh;q=0.9",
+		}).BindBody(&res).Do()
+	r := gjson.Get(res, "user_info").String()
+	json.Unmarshal([]byte(r), &result)
+	return
+}
+
+// 最大二十
+func GetVideosInfoByAwemeId(awemeIdList []string, options Options) (result []ExplosiveSentenceVideo, err error) {
+	if len(awemeIdList) > 20 {
+		err = errors.New("最大同时支持20个视频")
+		return
+	}
+	awemeIdListStr := strings.Join(awemeIdList, ",")
+	douYinUrl := fmt.Sprintf("https://www.iesdouyin.com/web/api/v2/aweme/iteminfo/?item_ids=%s", awemeIdListStr)
+	var res string
+	if options.Address == "" {
+		err = gout.GET(douYinUrl).
+			SetHeader(gout.H{
+				"user-agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
+				"accept-language": "zh-CN,zh;q=0.9",
+			}).BindBody(&res).Do()
+		r := gjson.Get(res, "item_list").String()
+		json.Unmarshal([]byte(r), &result)
+		return
+	}
+	c := &http.Client{}
+	err = gout.New(c).GET(douYinUrl).
+		SetProxy(options.Address).
+		SetHeader(gout.H{
+			"user-agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
+			"accept-language": "zh-CN,zh;q=0.9",
+		}).BindBody(&res).Do()
+	r := gjson.Get(res, "item_list").String()
 	json.Unmarshal([]byte(r), &result)
 	return
 }

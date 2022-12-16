@@ -105,3 +105,49 @@ type User struct {
 type Options struct {
 	Address string `json:"address"`
 }
+
+// 通用用户接口
+type OtherUserInfo struct {
+	AvatarLarger            AvatarLarger  `json:"avatar_larger"`
+	AvatarMedium            AvatarMedium  `json:"avatar_medium"`
+	UniqueID                string        `json:"unique_id"`
+	IsGovMediaVip           bool          `json:"is_gov_media_vip"`
+	FollowStatus            int           `json:"follow_status"`
+	FavoritingCount         int           `json:"favoriting_count"`
+	SecUID                  string        `json:"sec_uid"`
+	Secret                  int           `json:"secret"`
+	IsMixUser               bool          `json:"is_mix_user"`
+	UID                     string        `json:"uid"`
+	TotalFavorited          string        `json:"total_favorited"`
+	EnterpriseVerifyReason  string        `json:"enterprise_verify_reason"`
+	MplatformFollowersCount int           `json:"mplatform_followers_count"`
+	FollowingCount          int           `json:"following_count"`
+	FollowerCount           int           `json:"follower_count"`
+	ShowFavoriteList        bool          `json:"show_favorite_list"`
+	MixInfo                 []MixInfo     `json:"mix_info"`
+	AwemeCount              int           `json:"aweme_count"`
+	MixCount                int           `json:"mix_count"`
+	Nickname                string        `json:"nickname"`
+	VerificationType        int           `json:"verification_type"`
+	PlatformSyncInfo        []interface{} `json:"platform_sync_info"`
+	ShortID                 string        `json:"short_id"`
+	Signature               string        `json:"signature"`
+	AvatarThumb             AvatarThumb   `json:"avatar_thumb"`
+}
+type AvatarLarger struct {
+	URI     string   `json:"uri"`
+	URLList []string `json:"url_list"`
+}
+type AvatarMedium struct {
+	URLList []string `json:"url_list"`
+	URI     string   `json:"uri"`
+}
+type MixInfo struct {
+	MixID   string `json:"mix_id"`
+	MixName string `json:"mix_name"`
+}
+
+type AvatarThumb struct {
+	URI     string   `json:"uri"`
+	URLList []string `json:"url_list"`
+}
