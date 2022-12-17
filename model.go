@@ -2,17 +2,17 @@ package douyin
 
 type ExplosiveSentenceVideo struct {
 	Desc         string `json:"desc"`
-	DiggCount    int64  `json:"digg_count"`
-	CommentCount int64  `json:"comment_count"`
-	ShareCount   int64  `json:"share_count"`
-	PlayCount    int64  `json:"play_count"`
 	AwemeId      string `json:"aweme_id" `
-	VideoUrl     string `json:"video_url"`
 	Time         int64  `json:"time"`
 	SecUid       string `json:"sec_uid"`
 	UniqueId     string `json:"unique_id"`
 	DouyinId     string `json:"douyin_id"`
 	NickName     string `json:"nick_name"`
+	VideoUrl     string `json:"video_url"`
+	DiggCount    int64  `json:"digg_count"`
+	CommentCount int64  `json:"comment_count"`
+	ShareCount   int64  `json:"share_count"`
+	PlayCount    int64  `json:"play_count"`
 	ReleaseTime  int64  `json:"release_time"`
 	CoverImage   string `json:"cover_image"`
 	Duration     int64  `json:"duration"`
@@ -153,4 +153,61 @@ type MixInfo struct {
 type AvatarThumb struct {
 	URI     string   `json:"uri"`
 	URLList []string `json:"url_list"`
+}
+
+type UserInfoFromHtml struct {
+	UID                     string      `json:"uid"`
+	SecUID                  string      `json:"secUid"`
+	ShortID                 string      `json:"shortId"`
+	Nickname                string      `json:"nickname"`
+	Desc                    string      `json:"desc"`
+	Gender                  int         `json:"gender"`
+	AvatarURL               string      `json:"avatarUrl"`
+	Avatar300URL            string      `json:"avatar300Url"`
+	FollowStatus            int         `json:"followStatus"`
+	FollowerStatus          int         `json:"followerStatus"`
+	AwemeCount              int         `json:"awemeCount"`
+	FollowingCount          int         `json:"followingCount"`
+	FollowerCount           int         `json:"followerCount"`
+	MplatformFollowersCount int         `json:"mplatformFollowersCount"`
+	FavoritingCount         int         `json:"favoritingCount"`
+	TotalFavorited          int         `json:"totalFavorited"`
+	UniqueID                string      `json:"uniqueId"`
+	Age                     int         `json:"age"`
+	Country                 string      `json:"country"`
+	Province                string      `json:"province"`
+	City                    string      `json:"city"`
+	District                string      `json:"district"`
+	School                  interface{} `json:"school"`
+	EnterpriseVerifyReason  string      `json:"enterpriseVerifyReason"`
+	Secret                  int         `json:"secret"`
+	UserCanceled            bool        `json:"userCanceled"`
+	ShareQrcodeURL          string      `json:"shareQrcodeUrl"`
+	ShareInfo               struct {
+		BoolPersist   int    `json:"boolPersist"`
+		ShareDesc     string `json:"shareDesc"`
+		ShareImageURL struct {
+			URI     string   `json:"uri"`
+			URLList []string `json:"url_list"`
+		} `json:"shareImageUrl"`
+		ShareQrcodeURL struct {
+			URI     string   `json:"uri"`
+			URLList []string `json:"url_list"`
+		} `json:"shareQrcodeUrl"`
+		ShareURL       string `json:"shareUrl"`
+		ShareWeiboDesc string `json:"shareWeiboDesc"`
+	} `json:"shareInfo"`
+	RoomID                       int         `json:"roomId"`
+	IsBlocked                    bool        `json:"isBlocked"`
+	IsBlock                      bool        `json:"isBlock"`
+	IsBan                        bool        `json:"isBan"`
+	FavoritePermission           interface{} `json:"favoritePermission"`
+	ShowFavoriteList             bool        `json:"showFavoriteList"`
+	ViewHistoryPermission        bool        `json:"viewHistoryPermission"`
+	IPLocation                   string      `json:"ipLocation"`
+	IsGovMediaVip                bool        `json:"isGovMediaVip"`
+	IsStar                       bool        `json:"isStar"`
+	NeedSpecialShowFollowerCount bool        `json:"needSpecialShowFollowerCount"`
+	IsNotShow                    bool        `json:"isNotShow"`
+	IsOverFollower               bool        `json:"isOverFollower"`
 }

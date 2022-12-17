@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/PuerkitoBio/goquery"
+
 	"github.com/guonaihong/gout"
 	"github.com/kirinlabs/HttpRequest"
 	"github.com/tidwall/gjson"
@@ -27,18 +29,20 @@ func GetUserNickName(sessionid string, options Options) (nickName string, err er
 				"referer":      "https://creator.douyin.com/creator-micro/certification",
 				"cookie":       fmt.Sprintf("sessionid=%s", sessionid),
 			}).BindBody(&res).Do()
-		nickName = gjson.Get(res, "douyin_user_verify_info.nick_name").String()
+	} else {
+		c := &http.Client{}
+		err = gout.New(c).GET(douYinUrl).
+			SetProxy(options.Address).
+			SetHeader(gout.H{
+				"content-type": "application/json;charset=UTF-8",
+				"user-agent":   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
+				"referer":      "https://creator.douyin.com/creator-micro/certification",
+				"cookie":       fmt.Sprintf("sessionid=%s", sessionid),
+			}).BindBody(&res).Do()
+	}
+	if err != nil {
 		return
 	}
-	c := &http.Client{}
-	err = gout.New(c).GET(douYinUrl).
-		SetProxy(options.Address).
-		SetHeader(gout.H{
-			"content-type": "application/json;charset=UTF-8",
-			"user-agent":   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
-			"referer":      "https://creator.douyin.com/creator-micro/certification",
-			"cookie":       fmt.Sprintf("sessionid=%s", sessionid),
-		}).BindBody(&res).Do()
 	nickName = gjson.Get(res, "douyin_user_verify_info.nick_name").String()
 	return
 }
@@ -54,19 +58,20 @@ func GetCommentsVideos(sessionid string, cursor int, options Options) (result []
 				"cookie":          fmt.Sprintf("sessionid=%s", sessionid),
 				"accept-language": "zh-CN,zh;q=0.9",
 			}).BindBody(&res).Do()
-		data := gjson.Get(res, "item_info_list").String()
-		json.Unmarshal([]byte(data), &result)
+	} else {
+		c := &http.Client{}
+		err = gout.New(c).GET(douYinUrl).
+			SetProxy(options.Address).
+			SetHeader(gout.H{
+				"user-agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
+				"referer":         "https://creator.douyin.com/creator-micro/data/following/comment",
+				"cookie":          fmt.Sprintf("sessionid=%s", sessionid),
+				"accept-language": "zh-CN,zh;q=0.9",
+			}).BindBody(&res).Do()
+	}
+	if err != nil {
 		return
 	}
-	c := &http.Client{}
-	err = gout.New(c).GET(douYinUrl).
-		SetProxy(options.Address).
-		SetHeader(gout.H{
-			"user-agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
-			"referer":         "https://creator.douyin.com/creator-micro/data/following/comment",
-			"cookie":          fmt.Sprintf("sessionid=%s", sessionid),
-			"accept-language": "zh-CN,zh;q=0.9",
-		}).BindBody(&res).Do()
 	data := gjson.Get(res, "item_info_list").String()
 	json.Unmarshal([]byte(data), &result)
 	return
@@ -83,19 +88,21 @@ func GetCommentsList(sessionid string, cursor int, videoItemid string, options O
 				"cookie":          fmt.Sprintf("sessionid=%s", sessionid),
 				"accept-language": "zh-CN,zh;q=0.9",
 			}).BindBody(&res).Do()
-		infoList := gjson.Get(res, "comment_info_list").String()
-		json.Unmarshal([]byte(infoList), &result)
+	} else {
+		c := &http.Client{}
+		err = gout.New(c).GET(douYinUrl).
+			SetProxy(options.Address).
+			SetHeader(gout.H{
+				"user-agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
+				"referer":         "https://creator.douyin.com/creator-micro/data/following/comment",
+				"cookie":          fmt.Sprintf("sessionid=%s", sessionid),
+				"accept-language": "zh-CN,zh;q=0.9",
+			}).BindBody(&res).Do()
+	}
+
+	if err != nil {
 		return
 	}
-	c := &http.Client{}
-	err = gout.New(c).GET(douYinUrl).
-		SetProxy(options.Address).
-		SetHeader(gout.H{
-			"user-agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
-			"referer":         "https://creator.douyin.com/creator-micro/data/following/comment",
-			"cookie":          fmt.Sprintf("sessionid=%s", sessionid),
-			"accept-language": "zh-CN,zh;q=0.9",
-		}).BindBody(&res).Do()
 	infoList := gjson.Get(res, "comment_info_list").String()
 	json.Unmarshal([]byte(infoList), &result)
 	return
@@ -112,19 +119,21 @@ func GetCommentsListReply(sessionid string, cursor int, comment_id string, optio
 				"cookie":          fmt.Sprintf("sessionid=%s", sessionid),
 				"accept-language": "zh-CN,zh;q=0.9",
 			}).BindBody(&res).Do()
-		infoList := gjson.Get(res, "comment_info_list").String()
-		json.Unmarshal([]byte(infoList), &result)
+
+	} else {
+		c := &http.Client{}
+		err = gout.New(c).GET(douYinUrl).
+			SetProxy(options.Address).
+			SetHeader(gout.H{
+				"user-agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
+				"referer":         "https://creator.douyin.com/creator-micro/data/following/comment",
+				"cookie":          fmt.Sprintf("sessionid=%s", sessionid),
+				"accept-language": "zh-CN,zh;q=0.9",
+			}).BindBody(&res).Do()
+	}
+	if err != nil {
 		return
 	}
-	c := &http.Client{}
-	err = gout.New(c).GET(douYinUrl).
-		SetProxy(options.Address).
-		SetHeader(gout.H{
-			"user-agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
-			"referer":         "https://creator.douyin.com/creator-micro/data/following/comment",
-			"cookie":          fmt.Sprintf("sessionid=%s", sessionid),
-			"accept-language": "zh-CN,zh;q=0.9",
-		}).BindBody(&res).Do()
 	infoList := gjson.Get(res, "comment_info_list").String()
 	json.Unmarshal([]byte(infoList), &result)
 	return
@@ -140,17 +149,18 @@ func DeleteCommentsList(sessionid string, commentId string, options Options) (er
 				"cookie":          fmt.Sprintf("sessionid=%s", sessionid),
 				"accept-language": "zh-CN,zh;q=0.9",
 			}).SetJSON(gout.H{"comment_Id": commentId}).BindBody(&res).Do()
-		return
+	} else {
+		c := &http.Client{}
+		err = gout.New(c).POST(douYinUrl).
+			SetProxy(options.Address).
+			SetHeader(gout.H{
+				"user-agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
+				"referer":         "https://creator.douyin.com/creator-micro/data/following/comment",
+				"cookie":          fmt.Sprintf("sessionid=%s", sessionid),
+				"accept-language": "zh-CN,zh;q=0.9",
+			}).SetJSON(gout.H{"comment_Id": commentId}).BindBody(&res).Do()
 	}
-	c := &http.Client{}
-	err = gout.New(c).POST(douYinUrl).
-		SetProxy(options.Address).
-		SetHeader(gout.H{
-			"user-agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
-			"referer":         "https://creator.douyin.com/creator-micro/data/following/comment",
-			"cookie":          fmt.Sprintf("sessionid=%s", sessionid),
-			"accept-language": "zh-CN,zh;q=0.9",
-		}).SetJSON(gout.H{"comment_Id": commentId}).BindBody(&res).Do()
+
 	return
 
 }
@@ -177,7 +187,9 @@ func GetMyVideos(minCursor, maxCursor int64, sessionid string, options Options) 
 				"accept-language": "zh-CN,zh;q=0.9",
 			}).BindBody(&res).Do()
 	}
-
+	if err != nil {
+		return
+	}
 	r := gjson.Get(res, "aweme_list").Array()
 
 	for i, _ := range r {
@@ -232,7 +244,9 @@ func GetSecUidBySharedUrl(sharedUrl string, options Options) (secUid string, err
 		}
 		resp, err = HttpRequest.Proxy(http.ProxyURL(proxy)).Get(sharedUrl)
 	}
-
+	if err != nil {
+		return
+	}
 	defer resp.Close()
 	if err != nil {
 		return
@@ -241,9 +255,16 @@ func GetSecUidBySharedUrl(sharedUrl string, options Options) (secUid string, err
 		err = errors.New("get error")
 		return
 	}
+	if len(resp.Headers().Values("location")) <= 0 {
+		err = errors.New("接口可能已经改变")
+		return
+	}
 	location := resp.Headers().Values("location")[0]
-
-	regNew := regexp.MustCompile(`(?:sec_uid=)[a-z,A-Z，0-9, _, -]+`)
+	regNew := regexp.MustCompile(`(?:did=)[a-z,A-Z，0-9, _, -]+`)
+	if len(regNew.FindAllString(location, -1)) <= 0 {
+		err = errors.New("接口可能已经改变")
+		return
+	}
 	secUid = strings.Replace(regNew.FindAllString(location, -1)[0], "sec_uid=", "", 1)
 	return
 }
@@ -261,11 +282,14 @@ func GetOthersVideoByTimeStamp(secUid string, begin, end int64, options Options)
 		proxy, err := url.Parse(options.Address)
 		if err != nil {
 			fmt.Println(err)
+			return
 		}
 		resp, err = HttpRequest.Proxy(http.ProxyURL(proxy)).Get(fmt.Sprintf("https://www.iesdouyin.com/web/api/v2/aweme/post/?sec_uid=%s&count=200&min_cursor=%d&max_cursor=%d&aid=1128&_signature=PtCNCgAAXljWCq93QOKsFT7QjR",
 			secUid, begin, end))
 	}
-
+	if err != nil {
+		return
+	}
 	defer resp.Close()
 	if err != nil {
 		return
@@ -316,17 +340,18 @@ func GetOthersCommentsByAwemeId(awemeid string, cursor int, options Options) (re
 				"user-agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
 				"accept-language": "zh-CN,zh;q=0.9",
 			}).BindBody(&res).Do()
-		r := gjson.Get(res, "comments").String()
-		json.Unmarshal([]byte(r), &result)
+	} else {
+		c := &http.Client{}
+		err = gout.New(c).GET(douYinUrl).
+			SetProxy(options.Address).
+			SetHeader(gout.H{
+				"user-agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
+				"accept-language": "zh-CN,zh;q=0.9",
+			}).BindBody(&res).Do()
+	}
+	if err != nil {
 		return
 	}
-	c := &http.Client{}
-	err = gout.New(c).GET(douYinUrl).
-		SetProxy(options.Address).
-		SetHeader(gout.H{
-			"user-agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
-			"accept-language": "zh-CN,zh;q=0.9",
-		}).BindBody(&res).Do()
 	r := gjson.Get(res, "comments").String()
 	json.Unmarshal([]byte(r), &result)
 	return
@@ -341,9 +366,7 @@ func GetOthersUserInfo(secUid string, options Options) (result OtherUserInfo, er
 				"user-agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
 				"accept-language": "zh-CN,zh;q=0.9",
 			}).BindBody(&res).Do()
-		r := gjson.Get(res, "user_info").String()
-		json.Unmarshal([]byte(r), &result)
-		return
+
 	} else {
 		c := &http.Client{}
 		err = gout.New(c).GET(douYinUrl).
@@ -352,10 +375,17 @@ func GetOthersUserInfo(secUid string, options Options) (result OtherUserInfo, er
 				"user-agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
 				"accept-language": "zh-CN,zh;q=0.9",
 			}).BindBody(&res).Do()
-		r := gjson.Get(res, "user_info").String()
-		json.Unmarshal([]byte(r), &result)
+	}
+	if err != nil {
 		return
 	}
+	if res == "" {
+		err = errors.New("没有返回值,稍后继续重试")
+		return
+	}
+	r := gjson.Get(res, "user_info").String()
+	json.Unmarshal([]byte(r), &result)
+	return
 }
 
 // 最大二十
@@ -381,6 +411,14 @@ func GetVideosInfoByAwemeId(awemeIdList []string, options Options) (result []Exp
 				"user-agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
 				"accept-language": "zh-CN,zh;q=0.9",
 			}).BindBody(&res).Do()
+
+	}
+	if err != nil {
+		return
+	}
+	if res == "" {
+		errors.New("请稍后重试")
+		return
 	}
 	r := gjson.Get(res, "item_list").Array()
 
@@ -406,6 +444,47 @@ func GetVideosInfoByAwemeId(awemeIdList []string, options Options) (result []Exp
 		video.CoverImage = gjson.Get(res, fmt.Sprintf("item_list.%d.video.cover.url_list.0", i)).String()
 		video.ReleaseTime = gjson.Get(res, fmt.Sprintf("item_list.%d.create_time", i)).Int()
 		result = append(result, video)
+	}
+	return
+}
+
+func GetOthersUserInfoByHtml(secUid string, options Options) (result UserInfoFromHtml, err error) {
+	userUrl := fmt.Sprintf("https://www.douyin.com/user/%s", secUid)
+	var res *http.Response
+	if options.Address == "" {
+		res, err = http.Get(userUrl)
+		if err != nil {
+			return UserInfoFromHtml{}, err
+		}
+
+	} else {
+		uri, _ := url.Parse(options.Address)
+
+		c := http.Client{
+			Transport: &http.Transport{
+				// 设置代理
+				Proxy: http.ProxyURL(uri),
+			},
+		}
+		res, err = c.Get(userUrl)
+		if err != nil {
+			return UserInfoFromHtml{}, err
+		}
+
+	}
+	//str, _ := io.ReadAll(res.Body)
+	//fmt.Println(string(str))
+	doc, err := goquery.NewDocumentFromReader(res.Body)
+	if err != nil {
+		return
+	}
+	jsonStr := doc.Find("#RENDER_DATA").Text()
+	enEscapeUrl, _ := url.QueryUnescape(jsonStr)
+
+	r := gjson.Get(enEscapeUrl, "37.user.user").String()
+	json.Unmarshal([]byte(r), &result)
+	if err != nil {
+		return
 	}
 	return
 }
