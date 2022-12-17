@@ -491,3 +491,34 @@ func GetOthersUserInfoByHtml(secUid string, options Options) (result UserInfoFro
 	}
 	return
 }
+
+func GetFirstPageCommentBySessionId(awemeId string, sessionId string, options Options) (result []OtherCommentInfo, err error) {
+	url := fmt.Sprintf("https://www.douyin.com/aweme/v1/web/comment/list/?device_platform=webapp&aid=6383&channel=channel_pc_web&aweme_id=%s&cursor=0&count=20&item_type=0&insert_ids=&rcFT=&pc_client_type=1&version_code=170400&version_name=17.4.0&cookie_enabled=true&screen_width=2560&screen_height=1440&browser_language=zh-CN&browser_platform=Win32&browser_name=Chrome&browser_version=108.0.0.0&browser_online=true&engine_name=Blink&engine_version=108.0.0.0&os_name=Windows&os_version=10&cpu_core_num=12&device_memory=8&platform=PC&downlink=10&effective_type=4g&round_trip_time=0", awemeId)
+	var res string
+
+	if options.Address == "" {
+		err = gout.GET(url).
+			SetHeader(gout.H{
+				"user-agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
+				"referer":         "https://www.douyin.com/user",
+				"cookie":          "sessionid=" + sessionId,
+				"accept-language": "zh-CN,zh;q=0.9",
+			}).BindBody(&res).Do()
+	} else {
+		c := &http.Client{}
+		err = gout.New(c).GET(url).
+			SetProxy(options.Address).
+			SetHeader(gout.H{
+				"user-agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
+				"referer":         "https://www.douyin.com/user",
+				"cookie":          "sessionid=" + sessionId,
+				"accept-language": "zh-CN,zh;q=0.9",
+			}).BindBody(&res).Do()
+	}
+	if err != nil {
+		return
+	}
+	r := gjson.Get(res, "comments").String()
+	json.Unmarshal([]byte(r), &result)
+	return
+}
