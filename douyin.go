@@ -330,7 +330,7 @@ func GetOthersVideoByTimeStamp(secUid string, begin, end int64, options Options)
 	return
 }
 
-func GetOthersCommentsByAwemeId(awemeid string, cursor int, options Options) (result []OtherCommentInfo, err error) {
+func GetOthersCommentsByAwemeId(awemeid string, cursor int, options Options) (result []OtherCommentInfo, hasMore bool, err error) {
 
 	douYinUrl := fmt.Sprintf("https://www.douyin.com/aweme/v1/web/comment/list/?aweme_id=%s&cursor=%d&count=50", awemeid, cursor)
 	var res string
@@ -353,6 +353,9 @@ func GetOthersCommentsByAwemeId(awemeid string, cursor int, options Options) (re
 		return
 	}
 	r := gjson.Get(res, "comments").String()
+	if gjson.Get(res, "has_more").Int() > 0 {
+		hasMore = true
+	}
 	json.Unmarshal([]byte(r), &result)
 	return
 }
