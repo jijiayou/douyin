@@ -260,12 +260,13 @@ func GetSecUidBySharedUrl(sharedUrl string, options Options) (secUid string, err
 		return
 	}
 	location := resp.Headers().Values("location")[0]
-	regNew := regexp.MustCompile(`(?:did=)[a-z,A-Z，0-9, _, -]+`)
+
+	regNew := regexp.MustCompile(`(?:sec_uid=)[a-z,A-Z，0-9, _, -]+`)
 	if len(regNew.FindAllString(location, -1)) <= 0 {
 		err = errors.New("接口可能已经改变")
 		return
 	}
-	secUid = strings.Replace(regNew.FindAllString(location, -1)[0], "did=", "", 1)
+	secUid = strings.Replace(regNew.FindAllString(location, -1)[0], "sec_uid=", "", 1)
 	return
 }
 
