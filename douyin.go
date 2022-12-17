@@ -265,7 +265,7 @@ func GetSecUidBySharedUrl(sharedUrl string, options Options) (secUid string, err
 		err = errors.New("接口可能已经改变")
 		return
 	}
-	secUid = strings.Replace(regNew.FindAllString(location, -1)[0], "sec_uid=", "", 1)
+	secUid = strings.Replace(regNew.FindAllString(location, -1)[0], "did=", "", 1)
 	return
 }
 
