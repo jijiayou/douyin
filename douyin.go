@@ -279,9 +279,9 @@ func GetOthersVideoByTimeStamp(secUid string, begin, end int64, options Options)
 		resp, err = req.Get(fmt.Sprintf("https://www.iesdouyin.com/web/api/v2/aweme/post/?sec_uid=%s&count=200&min_cursor=%d&max_cursor=%d&aid=1128&_signature=PtCNCgAAXljWCq93QOKsFT7QjR",
 			secUid, begin, end))
 	} else {
-		proxy, err := url.Parse(options.Address)
-		if err != nil {
-			fmt.Println(err)
+		proxy, err1 := url.Parse(options.Address)
+		if err1 != nil {
+			err = err1
 			return
 		}
 		resp, err = HttpRequest.Proxy(http.ProxyURL(proxy)).Get(fmt.Sprintf("https://www.iesdouyin.com/web/api/v2/aweme/post/?sec_uid=%s&count=200&min_cursor=%d&max_cursor=%d&aid=1128&_signature=PtCNCgAAXljWCq93QOKsFT7QjR",
