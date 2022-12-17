@@ -269,7 +269,7 @@ func GetSecUidBySharedUrl(sharedUrl string, options Options) (secUid string, err
 	return
 }
 
-func GetOthersVideoByTimeStamp(secUid string, begin, end int64, options Options) (result []ExplosiveSentenceVideo, hasMore bool, err error) {
+func GetOthersVideoByTimeStamp(secUid string, begin, end int64, options Options) (result []ExplosiveSentenceVideo, hasMore bool, minCursor, maxCursor int64, err error) {
 	var resp *HttpRequest.Response
 	req := HttpRequest.NewRequest()
 	req.SetHeaders(map[string]string{
@@ -298,6 +298,8 @@ func GetOthersVideoByTimeStamp(secUid string, begin, end int64, options Options)
 	res := string(body)
 	r := gjson.Get(res, "aweme_list").Array()
 	hasMore = gjson.Get(res, "has_more").Bool()
+	minCursor = gjson.Get(res, "min_cursor").Int()
+	maxCursor = gjson.Get(res, "max_cursor").Int()
 
 	for i, _ := range r {
 		var video ExplosiveSentenceVideo
