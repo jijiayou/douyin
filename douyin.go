@@ -327,6 +327,23 @@ func GetOthersVideoByTimeStamp(secUid string, begin, end int64, options Options)
 		if err == nil {
 			video.ReleaseTime = parseInt
 		}
+		if video.ReleaseTime == 0 {
+			originUrlVideo := gjson.Get(res, fmt.Sprintf("aweme_list.%d.video.origin_cover.url_list.0", i)).String()
+			u, err1 := url.Parse(originUrlVideo)
+			if err1 == nil {
+				params := u.Query()
+				timeStr := params.Get("l")
+				if len(timeStr) > 14 {
+					tt, _ := time.ParseInLocation("20060102150405", timeStr[0:14], time.Local)
+
+					video.ReleaseTime = tt.Unix()
+				}
+			}
+		}
+		if video.ReleaseTime == 0 {
+			video.ReleaseTime = video.Time
+		}
+
 		result = append(result, video)
 	}
 	return
