@@ -275,6 +275,7 @@ func GetOthersVideoByTimeStamp(secUid string, begin, end int64, options Options)
 	req := HttpRequest.NewRequest()
 	req.SetHeaders(map[string]string{
 		"User-Agent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Mobile Safari/537.36",
+		"cookie":     "s_v_web_id=verify_lc45vgxz_OVZ3Zw2m_ivnd_402o_81EZ_3R7XNGoVlHdN;",
 	})
 	if options.Address == "" {
 		resp, err = req.Get(fmt.Sprintf("https://www.iesdouyin.com/web/api/v2/aweme/post/?sec_uid=%s&count=200&min_cursor=%d&max_cursor=%d&aid=1128&_signature=PtCNCgAAXljWCq93QOKsFT7QjR",
@@ -359,6 +360,7 @@ func GetOthersCommentsByAwemeId(awemeid string, cursor int, options Options) (re
 			SetHeader(gout.H{
 				"user-agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
 				"accept-language": "zh-CN,zh;q=0.9",
+				"cookie":          "s_v_web_id=verify_lc45vgxz_OVZ3Zw2m_ivnd_402o_81EZ_3R7XNGoVlHdN;",
 			}).BindBody(&res).Do()
 	} else {
 		c := &http.Client{}
@@ -388,6 +390,7 @@ func GetOthersUserInfo(secUid string, options Options) (result OtherUserInfo, er
 			SetHeader(gout.H{
 				"user-agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
 				"accept-language": "zh-CN,zh;q=0.9",
+				"cookie":          "s_v_web_id=verify_lc45vgxz_OVZ3Zw2m_ivnd_402o_81EZ_3R7XNGoVlHdN;",
 			}).BindBody(&res).Do()
 
 	} else {
@@ -425,6 +428,7 @@ func GetVideosInfoByAwemeId(awemeIdList []string, options Options) (result []Exp
 			SetHeader(gout.H{
 				"user-agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
 				"accept-language": "zh-CN,zh;q=0.9",
+				"cookie":          "s_v_web_id=verify_lc45vgxz_OVZ3Zw2m_ivnd_402o_81EZ_3R7XNGoVlHdN;",
 			}).BindBody(&res).Do()
 	} else {
 		c := &http.Client{}
@@ -433,6 +437,7 @@ func GetVideosInfoByAwemeId(awemeIdList []string, options Options) (result []Exp
 			SetHeader(gout.H{
 				"user-agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
 				"accept-language": "zh-CN,zh;q=0.9",
+				"cookie":          "s_v_web_id=verify_lc45vgxz_OVZ3Zw2m_ivnd_402o_81EZ_3R7XNGoVlHdN;",
 			}).BindBody(&res).Do()
 
 	}
