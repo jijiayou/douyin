@@ -274,7 +274,7 @@ func GetOthersVideoByTimeStamp(secUid string, begin, end int64, sessionId string
 	var resp *HttpRequest.Response
 	req := HttpRequest.NewRequest()
 	req.SetHeaders(map[string]string{
-		"User-Agent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Mobile Safari/537.36",
+		"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
 		"cookie":     fmt.Sprintf("sessionid=%s", sessionId),
 		"referer":    "https://www.douyin.com/user",
 	})
