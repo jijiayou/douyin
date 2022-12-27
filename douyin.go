@@ -270,15 +270,16 @@ func GetSecUidBySharedUrl(sharedUrl string, options Options) (secUid string, err
 	return
 }
 
-func GetOthersVideoByTimeStamp(secUid string, begin, end int64, options Options) (result []ExplosiveSentenceVideo, hasMore bool, minCursor, maxCursor int64, err error) {
+func GetOthersVideoByTimeStamp(secUid string, begin, end int64, sessionId string, options Options) (result []ExplosiveSentenceVideo, hasMore bool, minCursor, maxCursor int64, err error) {
 	var resp *HttpRequest.Response
 	req := HttpRequest.NewRequest()
 	req.SetHeaders(map[string]string{
 		"User-Agent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Mobile Safari/537.36",
-		"cookie":     "s_v_web_id=verify_lbqig1lu_DnKk02qH_NnmE_4Ml2_8d6n_RiibzFd1uyb3;",
+		"cookie":     fmt.Sprintf("sessionid=%s", sessionId),
+		"referer":    "https://www.douyin.com/user",
 	})
 	if options.Address == "" {
-		resp, err = req.Get(fmt.Sprintf("https://www.iesdouyin.com/web/api/v2/aweme/post/?sec_uid=%s&count=200&min_cursor=%d&max_cursor=%d&aid=1128&_signature=PtCNCgAAXljWCq93QOKsFT7QjR",
+		resp, err = req.Get(fmt.Sprintf("https://www.douyin.com/aweme/v1/web/aweme/post/?device_platform=webapp&aid=6383&channel=channel_pc_web&sec_user_id=%s&count=200&min_cursor=%d&max_cursor=%d",
 			secUid, begin, end))
 	} else {
 		proxy, err1 := url.Parse(options.Address)
@@ -286,7 +287,7 @@ func GetOthersVideoByTimeStamp(secUid string, begin, end int64, options Options)
 			err = err1
 			return
 		}
-		resp, err = HttpRequest.Proxy(http.ProxyURL(proxy)).Get(fmt.Sprintf("https://www.iesdouyin.com/web/api/v2/aweme/post/?sec_uid=%s&count=200&min_cursor=%d&max_cursor=%d&aid=1128&_signature=PtCNCgAAXljWCq93QOKsFT7QjR",
+		resp, err = HttpRequest.Proxy(http.ProxyURL(proxy)).Get(fmt.Sprintf("https://www.douyin.com/aweme/v1/web/aweme/post/?device_platform=webapp&aid=6383&channel=channel_pc_web&sec_user_id=%s&count=200&min_cursor=%d&max_cursor=%d",
 			secUid, begin, end))
 	}
 	if err != nil {
@@ -360,7 +361,6 @@ func GetOthersCommentsByAwemeId(awemeid string, cursor int, options Options) (re
 			SetHeader(gout.H{
 				"user-agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
 				"accept-language": "zh-CN,zh;q=0.9",
-				"cookie":          "s_v_web_id=verify_lbqig1lu_DnKk02qH_NnmE_4Ml2_8d6n_RiibzFd1uyb3;",
 			}).BindBody(&res).Do()
 	} else {
 		c := &http.Client{}
@@ -390,7 +390,6 @@ func GetOthersUserInfo(secUid string, options Options) (result OtherUserInfo, er
 			SetHeader(gout.H{
 				"user-agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
 				"accept-language": "zh-CN,zh;q=0.9",
-				"cookie":          "s_v_web_id=verify_lbqig1lu_DnKk02qH_NnmE_4Ml2_8d6n_RiibzFd1uyb3;",
 			}).BindBody(&res).Do()
 
 	} else {
@@ -428,7 +427,6 @@ func GetVideosInfoByAwemeId(awemeIdList []string, options Options) (result []Exp
 			SetHeader(gout.H{
 				"user-agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
 				"accept-language": "zh-CN,zh;q=0.9",
-				"cookie":          "s_v_web_id=verify_lbqig1lu_DnKk02qH_NnmE_4Ml2_8d6n_RiibzFd1uyb3",
 			}).BindBody(&res).Do()
 	} else {
 		c := &http.Client{}
@@ -437,7 +435,6 @@ func GetVideosInfoByAwemeId(awemeIdList []string, options Options) (result []Exp
 			SetHeader(gout.H{
 				"user-agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
 				"accept-language": "zh-CN,zh;q=0.9",
-				"cookie":          "s_v_web_id=verify_lbqig1lu_DnKk02qH_NnmE_4Ml2_8d6n_RiibzFd1uyb3",
 			}).BindBody(&res).Do()
 
 	}
