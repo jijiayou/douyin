@@ -165,8 +165,8 @@ func DeleteCommentsList(sessionid string, commentId string, options Options) (er
 
 }
 
-func GetMyVideos(minCursor, maxCursor int64, sessionid string, options Options) (result []ExplosiveSentenceVideo, err error) {
-	douYinUrl := fmt.Sprintf("https://creator.douyin.com/web/api/media/aweme/post/?scene=star_atlas&status=0&count=12&min_cursor=%d&max_cursor=%d", minCursor, maxCursor)
+func GetMyVideos(start, end int64, sessionid string, options Options) (result []ExplosiveSentenceVideo, hasMore bool, minCursor, maxCursor int64, err error) {
+	douYinUrl := fmt.Sprintf("https://creator.douyin.com/web/api/media/aweme/post/?scene=star_atlas&status=0&count=12&min_cursor=%d&max_cursor=%d", start, end)
 	var res string
 	if options.Address == "" {
 		err = gout.GET(douYinUrl).
@@ -191,6 +191,10 @@ func GetMyVideos(minCursor, maxCursor int64, sessionid string, options Options) 
 		return
 	}
 	r := gjson.Get(res, "aweme_list").Array()
+
+	hasMore = gjson.Get(res, "has_more").Bool()
+	minCursor = gjson.Get(res, "min_cursor").Int()
+	maxCursor = gjson.Get(res, "max_cursor").Int()
 
 	for i, _ := range r {
 		var video ExplosiveSentenceVideo
