@@ -206,6 +206,8 @@ func GetMyVideos(minCursor, maxCursor int64, sessionid string, options Options) 
 		video.CommentCount = gjson.Get(res, fmt.Sprintf("aweme_list.%d.statistics.comment_count", i)).Int()
 		video.DiggCount = gjson.Get(res, fmt.Sprintf("aweme_list.%d.statistics.digg_count", i)).Int()
 		video.ShareCount = gjson.Get(res, fmt.Sprintf("aweme_list.%d.statistics.share_count", i)).Int()
+		video.CollectCount = gjson.Get(res, fmt.Sprintf("aweme_list.%d.statistics.collect_count", i)).Int()
+
 		video.PlayCount = gjson.Get(res, fmt.Sprintf("aweme_list.%d.statistics.play_count", i)).Int()
 		video.VideoUrl = gjson.Get(res, fmt.Sprintf("aweme_list.%d.video.play_addr.url_list.0", i)).String()
 		video.Duration = gjson.Get(res, fmt.Sprintf("aweme_list.%d.video.duration", i)).Int()
@@ -319,7 +321,7 @@ func GetOthersVideoByTimeStamp(secUid string, begin, end int64, sessionId string
 		video.CommentCount = gjson.Get(res, fmt.Sprintf("aweme_list.%d.statistics.comment_count", i)).Int()
 		video.DiggCount = gjson.Get(res, fmt.Sprintf("aweme_list.%d.statistics.digg_count", i)).Int()
 		video.ShareCount = gjson.Get(res, fmt.Sprintf("aweme_list.%d.statistics.share_count", i)).Int()
-
+		video.CollectCount = gjson.Get(res, fmt.Sprintf("aweme_list.%d.statistics.collect_count", i)).Int()
 		video.PlayCount = gjson.Get(res, fmt.Sprintf("aweme_list.%d.statistics.play_count", i)).Int()
 		video.Duration = gjson.Get(res, fmt.Sprintf("aweme_list.%d.video.duration", i)).Int()
 
@@ -461,6 +463,7 @@ func GetVideosInfoByAwemeId(awemeIdList []string, options Options) (result []Exp
 		video.CommentCount = gjson.Get(res, fmt.Sprintf("item_list.%d.statistics.comment_count", i)).Int()
 		video.DiggCount = gjson.Get(res, fmt.Sprintf("item_list.%d.statistics.digg_count", i)).Int()
 		video.ShareCount = gjson.Get(res, fmt.Sprintf("item_list.%d.statistics.share_count", i)).Int()
+		video.CollectCount = gjson.Get(res, fmt.Sprintf("item_list.%d.statistics.collect_count", i)).Int()
 
 		video.PlayCount = gjson.Get(res, fmt.Sprintf("item_list.%d.statistics.play_count", i)).Int()
 		video.Duration = gjson.Get(res, fmt.Sprintf("item_list.%d.video.duration", i)).Int()

@@ -13,6 +13,7 @@ type ExplosiveSentenceVideo struct {
 	CommentCount int64  `json:"comment_count"`
 	ShareCount   int64  `json:"share_count"`
 	PlayCount    int64  `json:"play_count"`
+	CollectCount int64  `json:"collect_count"`
 	ReleaseTime  int64  `json:"release_time"`
 	CoverImage   string `json:"cover_image"`
 	Duration     int64  `json:"duration"`
