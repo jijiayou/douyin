@@ -74,6 +74,16 @@ func GetCommentsVideos(sessionid string, cursor int, options Options) (result []
 	}
 	data := gjson.Get(res, "item_info_list").String()
 	json.Unmarshal([]byte(data), &result)
+	for idx := range result {
+		u, err := url.ParseRequestURI(result[idx].ItemLink)
+		if err != nil {
+			return nil, err
+		}
+		path := u.Path
+
+		path = strings.Trim(path, "/")
+		result[idx].AwemeId = strings.TrimLeft(path, "share/video/")
+	}
 	return
 }
 
