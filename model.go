@@ -47,6 +47,7 @@ func (ExplosiveSentenceVideo) TableName() string {
 
 type VideoInfo struct {
 	AnchorUserID  string `json:"anchor_user_id"`
+	AwemeId       string `json:"aweme_id"`
 	CommentCount  int    `json:"comment_count"`
 	CoverImageURL string `json:"cover_image_url"`
 	CreateTime    string `json:"create_time"`
