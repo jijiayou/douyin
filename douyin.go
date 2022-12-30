@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"github.com/PuerkitoBio/goquery"
-
 	"github.com/guonaihong/gout"
 	"github.com/kirinlabs/HttpRequest"
 	"github.com/tidwall/gjson"
@@ -522,8 +521,22 @@ func GetOthersUserInfoByHtml(secUid string, options Options) (result UserInfoFro
 	}
 	jsonStr := doc.Find("#RENDER_DATA").Text()
 	enEscapeUrl, _ := url.QueryUnescape(jsonStr)
-
-	r := gjson.Get(enEscapeUrl, "37.user.user").String()
+	var data = make(map[string]interface{})
+	err = json.Unmarshal([]byte(enEscapeUrl), &data)
+	if err != nil {
+		return
+	}
+	var finalKey string
+	for s, _ := range data {
+		if s != "1" && s != "_location" && s != "app" {
+			finalKey = s
+		}
+	}
+	if finalKey == "" {
+		err = errors.New("解析失败")
+		return
+	}
+	r := gjson.Get(enEscapeUrl, fmt.Sprintf("%s.user.user", finalKey)).String()
 	json.Unmarshal([]byte(r), &result)
 	if err != nil {
 		return
