@@ -1,24 +1,50 @@
 package douyin
 
+//type ExplosiveSentenceVideo struct {
+//	Desc         string `json:"desc"`
+//	AwemeId      string `json:"aweme_id" `
+//	Time         int64  `json:"time"`
+//	SecUid       string `json:"sec_uid"`
+//	UniqueId     string `json:"unique_id"`
+//	DouyinId     string `json:"douyin_id"`
+//	NickName     string `json:"nick_name"`
+//	VideoUrl     string `json:"video_url"`
+//	DiggCount    int64  `json:"digg_count"`
+//	CommentCount int64  `json:"comment_count"`
+//	ShareCount   int64  `json:"share_count"`
+//	PlayCount    int64  `json:"play_count"`
+//	CollectCount int64  `json:"collect_count"`
+//	ReleaseTime  int64  `json:"release_time"`
+//	CoverImage   string `json:"cover_image"`
+//	Duration     int64  `json:"duration"`
+//	Comments     string `json:"comments" `
+//}
+
 type ExplosiveSentenceVideo struct {
-	Desc         string `json:"desc"`
-	AwemeId      string `json:"aweme_id" `
-	Time         int64  `json:"time"`
-	SecUid       string `json:"sec_uid"`
-	UniqueId     string `json:"unique_id"`
-	DouyinId     string `json:"douyin_id"`
-	NickName     string `json:"nick_name"`
-	VideoUrl     string `json:"video_url"`
-	DiggCount    int64  `json:"digg_count"`
-	CommentCount int64  `json:"comment_count"`
-	ShareCount   int64  `json:"share_count"`
-	PlayCount    int64  `json:"play_count"`
-	CollectCount int64  `json:"collect_count"`
-	ReleaseTime  int64  `json:"release_time"`
-	CoverImage   string `json:"cover_image"`
-	Duration     int64  `json:"duration"`
-	Comments     string `json:"comments" `
+	ID           int64  `gorm:"column:id" db:"id" json:"id" form:"id"`
+	Desc         string `gorm:"column:desc" db:"desc" json:"desc" form:"desc"`
+	AwemeId      string `gorm:"column:aweme_id" db:"aweme_id" json:"aweme_id" form:"aweme_id"`
+	Time         int64  `gorm:"column:time" db:"time" json:"time" form:"time"`
+	SecUid       string `gorm:"column:sec_uid" db:"sec_uid" json:"sec_uid" form:"sec_uid"`
+	UniqueId     string `gorm:"column:unique_id" db:"unique_id" json:"unique_id" form:"unique_id"`
+	DouyinId     string `gorm:"column:douyin_id" db:"douyin_id" json:"douyin_id" form:"douyin_id"`
+	VideoUrl     string `gorm:"column:video_url" db:"video_url" json:"video_url" form:"video_url"`
+	CommentCount int64  `gorm:"column:comment_count" db:"comment_count" json:"comment_count" form:"comment_count"`
+	DiggCount    int64  `gorm:"column:digg_count" db:"digg_count" json:"digg_count" form:"digg_count"`
+	ShareCount   int64  `gorm:"column:share_count" db:"share_count" json:"share_count" form:"share_count"`
+	PlayCount    int64  `gorm:"column:play_count" db:"play_count" json:"play_count" form:"play_count"`
+	NickName     string `gorm:"column:nick_name" db:"nick_name" json:"nick_name" form:"nick_name"`
+	CollectCount int64  `gorm:"column:collect_count" db:"collect_count" json:"collect_count" form:"collect_count"`
+	ReleaseTime  int64  `gorm:"column:release_time" db:"release_time" json:"release_time" form:"release_time"`
+	CoverImage   string `gorm:"column:cover_image" db:"cover_image" json:"cover_image" form:"cover_image"`
+	Comments     string `gorm:"column:comments" db:"comments" json:"comments" form:"comments"`
+	Duration     int64  `gorm:"column:duration" db:"duration" json:"duration" form:"duration"`
 }
+
+func (ExplosiveSentenceVideo) TableName() string {
+	return "explosive_sentence_video"
+}
+
 type VideoInfo struct {
 	AnchorUserID  string `json:"anchor_user_id"`
 	CommentCount  int    `json:"comment_count"`
