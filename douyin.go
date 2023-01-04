@@ -285,12 +285,12 @@ func GetSecUidBySharedUrl(sharedUrl string, options Options) (secUid string, err
 	return
 }
 
-func GetOthersVideoByTimeStamp(secUid string, begin, end int64, webId, sessionId string, options Options) (result []ExplosiveSentenceVideo, hasMore bool, minCursor, maxCursor int64, err error) {
+func GetOthersVideoByTimeStamp(secUid string, begin, end int64, cookie string, options Options) (result []ExplosiveSentenceVideo, hasMore bool, minCursor, maxCursor int64, err error) {
 	var resp *HttpRequest.Response
 	req := HttpRequest.NewRequest()
 	req.SetHeaders(map[string]string{
 		"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
-		"cookie":     fmt.Sprintf("s_v_web_id=%s;sessionid=%s", webId, sessionId),
+		"cookie":     cookie,
 		"referer":    "https://www.douyin.com/user",
 	})
 	if options.Address == "" {
