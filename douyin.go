@@ -339,28 +339,29 @@ func GetOthersVideoByTimeStamp(secUid string, begin, end int64, cookie string, o
 		video.Duration = gjson.Get(res, fmt.Sprintf("aweme_list.%d.video.duration", i)).Int()
 
 		video.CoverImage = gjson.Get(res, fmt.Sprintf("aweme_list.%d.video.cover.url_list.0", i)).String()
-		originUrl := gjson.Get(res, fmt.Sprintf("aweme_list.%d.video.origin_cover.uri", i)).String()
-		ReleaseTimeStrArray := strings.Split(originUrl, "_")
-		parseInt, err := strconv.ParseInt(ReleaseTimeStrArray[len(ReleaseTimeStrArray)-1], 10, 64)
-		if err == nil {
-			video.ReleaseTime = parseInt
-		}
-		if video.ReleaseTime == 0 {
-			originUrlVideo := gjson.Get(res, fmt.Sprintf("aweme_list.%d.video.origin_cover.url_list.0", i)).String()
-			u, err1 := url.Parse(originUrlVideo)
-			if err1 == nil {
-				params := u.Query()
-				timeStr := params.Get("l")
-				if len(timeStr) > 14 {
-					tt, _ := time.ParseInLocation("20060102150405", timeStr[0:14], time.Local)
-
-					video.ReleaseTime = tt.Unix()
-				}
-			}
-		}
-		if video.ReleaseTime == 0 {
-			video.ReleaseTime = video.Time
-		}
+		//originUrl := gjson.Get(res, fmt.Sprintf("aweme_list.%d.video.origin_cover.uri", i)).String()
+		//ReleaseTimeStrArray := strings.Split(originUrl, "_")
+		//parseInt, err := strconv.ParseInt(ReleaseTimeStrArray[len(ReleaseTimeStrArray)-1], 10, 64)
+		//if err == nil {
+		//	video.ReleaseTime = parseInt
+		//}
+		video.ReleaseTime = gjson.Get(res, fmt.Sprintf("aweme_list.%d.create_time", i)).Int()
+		//if video.ReleaseTime == 0 {
+		//	originUrlVideo := gjson.Get(res, fmt.Sprintf("aweme_list.%d.video.origin_cover.url_list.0", i)).String()
+		//	u, err1 := url.Parse(originUrlVideo)
+		//	if err1 == nil {
+		//		params := u.Query()
+		//		timeStr := params.Get("l")
+		//		if len(timeStr) > 14 {
+		//			tt, _ := time.ParseInLocation("20060102150405", timeStr[0:14], time.Local)
+		//
+		//			video.ReleaseTime = tt.Unix()
+		//		}
+		//	}
+		//}
+		//if video.ReleaseTime == 0 {
+		//	video.ReleaseTime = video.Time
+		//}
 
 		result = append(result, video)
 	}
